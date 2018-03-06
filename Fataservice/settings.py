@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'api_v1',
 ]
 
 MIDDLEWARE = [
@@ -76,8 +78,12 @@ WSGI_APPLICATION = 'Fataservice.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'd9ef928o48bsjr',
+        'USER': 'kpbnkfjmkeplil',
+        'PASSWORD': '171ff01a6e8de4e3f09bafde145cc268b4bc81295d448d37a262342c9a2d52bc',
+        'HOST': 'ec2-54-221-220-59.compute-1.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
