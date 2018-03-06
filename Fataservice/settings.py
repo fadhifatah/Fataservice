@@ -26,7 +26,7 @@ SECRET_KEY = '#kpbqhy57-47$_6k47omb0)glwgen7l0_qc21s=agk0*ji7366'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'http://host21018.proxy.infralabs.cs.ui.ac.id',
+    'host21018.proxy.infralabs.cs.ui.ac.id',
     '172.22.0.98:80',
     '127.0.0.1:8000',
 ]
