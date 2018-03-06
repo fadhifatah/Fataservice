@@ -80,27 +80,27 @@ WSGI_APPLICATION = 'Fataservice.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd9ef928o48bsjr',
-        'USER': 'kpbnkfjmkeplil',
-        'PASSWORD': '171ff01a6e8de4e3f09bafde145cc268b4bc81295d448d37a262342c9a2d52bc',
-        'HOST': 'ec2-54-221-220-59.compute-1.amazonaws.com',
-        'PORT': '5432',
-    }
-}
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'fataservice',
-#         'USER': 'postgres',
-#         'PASSWORD': 'postgres',
-#         'HOST': '172.22.0.67',
+#         'NAME': 'd9ef928o48bsjr',
+#         'USER': 'kpbnkfjmkeplil',
+#         'PASSWORD': '171ff01a6e8de4e3f09bafde145cc268b4bc81295d448d37a262342c9a2d52bc',
+#         'HOST': 'ec2-54-221-220-59.compute-1.amazonaws.com',
 #         'PORT': '5432',
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'fataservice',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'host20018.proxy.infralabs.cs.ui.ac.id',
+        'PORT': '5432',
+    }
+}
 
 
 # Password validation
