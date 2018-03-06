@@ -97,7 +97,7 @@ DATABASES = {
         'NAME': 'fataservice',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'host20018.proxy.infralabs.cs.ui.ac.id',
+        'HOST': '172.22.0.67',
         'PORT': '5432',
     }
 }
