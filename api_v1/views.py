@@ -26,7 +26,7 @@ def login(request):
             }
         )
 
-        if oauth_token.status_code == '200':
+        if oauth_token.status_code == 200:
             access_token = oauth_token.json()['access_token']
             return JsonResponse({'status': 'ok', 'access_token': access_token})
         else:
