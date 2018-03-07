@@ -159,7 +159,20 @@ def create_comment(request):
 
 
 def get_comment_by_id(request, comment_id):
-    return JsonResponse({'comment_id': comment_id})
+    if request.method == 'GET':
+        if Comment.objects.filter(id(comment_id)).exists():
+            comment = Comment.objects.get(id(comment_id))
+            data = {
+                'id': comment.id,
+                'comment': comment.comment,
+                'createdBy': comment.created_by.display_name,
+                'createdAt': comment.created_at,
+                'updatedAt': comment.updated_at
+            }
+            return JsonResponse({'status': 'ok', 'data': data})
+        else:
+            return JsonResponse({'status': 401, 'description': 'Comment by id=' + comment_id + ' not found'})
+    return JsonResponse({'status': 401, 'description': 'Wrong Method'})
 
 
 def get_comments(request):
