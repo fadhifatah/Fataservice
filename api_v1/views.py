@@ -231,5 +231,52 @@ def delete_comment(request):
 @csrf_exempt
 def update_comment(request):
     if request.method == 'PUT':
-        return
-    return JsonResponse({})
+        try:
+            auth_header = str(request.META['HTTP_AUTHORIZATION'])
+            token = auth_header[7:]
+        except ValueError:
+            return JsonResponse({'status': 401, 'description': 'Header Error'})
+
+        try:
+            body_unicode = request.body.decode('utf-8')
+            body = json.loads(body_unicode)
+            comment_id = body['id']
+            comment_new = body['comment']
+        except ValueError:
+            return JsonResponse({'status': 401, 'description': 'Wrong JSON format'})
+
+        oauth_resource = requests.get(
+            'http://172.22.0.2/oauth/resource',
+            headers={
+                'Authorization': 'Bearer ' + token
+            }
+        )
+
+        if oauth_resource.status_code == 200:
+            username = oauth_resource.json()['user_id']
+
+            if Comment.objects.filter(id=comment_id).exists():
+                comment = Comment.objects.get(id=comment_id)
+                user = User.objects.get(username=username)
+
+                if user.username == comment.created_by.username:
+                    comment = Comment.objects.get(id=comment_id)
+                    comment.comment = comment_new
+                    comment.save()
+
+                    comment = Comment.objects.get(id=comment_id)
+                    data = {
+                        'id': comment.id,
+                        'comment': comment.comment,
+                        'createdBy': comment.created_by.display_name,
+                        'createdAt': comment.created_at,
+                        'updatedAt': comment.updated_at
+                    }
+                    return JsonResponse({'status': 'ok', 'data': data})
+                else:
+                    return JsonResponse({'status': 401, 'description': 'Can\'t remove this comment. Not yours!'})
+            else:
+                return JsonResponse({'status': 401, 'description': 'Comment by id=' + str(comment_id) + ' not found'})
+        else:
+            return JsonResponse({'status': 401, 'description': 'Failed'})
+    return JsonResponse({'status': 401, 'description': 'Wrong Method'})
