@@ -13,7 +13,7 @@ def login(request):
             username = request.POST.get('username')
             password = request.POST.get('password')
         except ValueError:
-            return JsonResponse({'status': '401', 'description': 'Wrong POST data'})
+            return JsonResponse({'status': 401, 'description': 'Wrong POST data'})
 
         oauth_token = requests.post(
             'http://172.22.0.2/oauth/token',
@@ -30,8 +30,8 @@ def login(request):
             access_token = oauth_token.json()['access_token']
             return JsonResponse({'status': 'ok', 'access_token': access_token})
         else:
-            return JsonResponse({'status': '401', 'description': 'Failed'})
-    return JsonResponse({'status': '401', 'description': 'Wrong Method'})
+            return JsonResponse({'status': 401, 'description': 'Failed'})
+    return JsonResponse({'status': 401, 'description': 'Wrong Method'})
 
 
 @csrf_exempt
@@ -41,23 +41,24 @@ def register(request):
             auth_header = str(request.META['HTTP_AUTHORIZATION'])
             token = auth_header[7:]
         except ValueError:
-            return JsonResponse({'status': '401', 'description': 'Header Error'})
+            return JsonResponse({'status': 401, 'description': 'Header Error'})
+
         try:
             display_name = request.POST.get('displayName')
         except ValueError:
-            return JsonResponse({'status': '401', 'description': 'Wrong POST data'})
+            return JsonResponse({'status': 401, 'description': 'Wrong POST data'})
 
         oauth_resource = requests.get(
             'http://172.22.0.2/oauth/resource',
             headers={
-                'Authorization': 'Bearer ' + token
+                'Authorization': auth_header
             }
         )
 
         if oauth_resource.status_code == 200:
             return JsonResponse({'status': 'ok', 'access_token': token})
-        return JsonResponse({'status': '401', 'description': 'Failed'})
-    return JsonResponse({'status': '401', 'description': 'Wrong Method'})
+        return JsonResponse({'status': 401, 'description': 'Failed'})
+    return JsonResponse({'status': 401, 'description': 'Wrong Method'})
 
 
 def get_users(request):
@@ -70,7 +71,7 @@ def get_users(request):
 
         return JsonResponse({'username': str(username), 'display_name': display_name})
 
-    return JsonResponse({'status': '401', 'description': 'Wrong Method'})
+    return JsonResponse({'status': 401, 'description': 'Wrong Method'})
 
 
 @csrf_exempt
