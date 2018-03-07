@@ -142,7 +142,7 @@ def create_comment(request):
             if User.objects.filter(username=username).exists():
                 user = User.objects.get(username=username)
 
-                comment = Comment.objects.create(username=user, comment=comment)
+                comment = Comment.objects.create(username=user.objects, comment=comment)
                 data = {
                     'id': comment.id,
                     'comment': comment.comment,
