@@ -56,7 +56,7 @@ def register(request):
 
         if oauth_resource.status_code == 200:
             return JsonResponse({'status': 'ok', 'access_token': token})
-        return JsonResponse({'status': '401', 'description': 'Wrong Method'})
+        return JsonResponse({'status': '401', 'description': 'Failed'})
     return JsonResponse({'status': '401', 'description': 'Wrong Method'})
 
 
