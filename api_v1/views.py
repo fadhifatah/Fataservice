@@ -171,7 +171,7 @@ def get_comment_by_id(request, comment_id):
             }
             return JsonResponse({'status': 'ok', 'data': data})
         else:
-            return JsonResponse({'status': 401, 'description': 'Comment by id=' + comment_id + ' not found'})
+            return JsonResponse({'status': 401, 'description': 'Comment by id=' + str(comment_id) + ' not found'})
     return JsonResponse({'status': 401, 'description': 'Wrong Method'})
 
 
@@ -181,7 +181,42 @@ def get_comments(request):
 
 @csrf_exempt
 def delete_comment(request):
-    return JsonResponse({})
+    if request.method == 'DELETE':
+        try:
+            auth_header = str(request.META['HTTP_AUTHORIZATION'])
+            token = auth_header[7:]
+        except ValueError:
+            return JsonResponse({'status': 401, 'description': 'Header Error'})
+
+        try:
+            comment_id = request.POST.get('id')
+        except ValueError:
+            return JsonResponse({'status': 401, 'description': 'Wrong POST data'})
+
+        oauth_resource = requests.get(
+            'http://172.22.0.2/oauth/resource',
+            headers={
+                'Authorization': 'Bearer ' + token
+            }
+        )
+
+        if oauth_resource.status_code == 200:
+            username = oauth_resource.json()['user_id']
+
+            if Comment.objects.filter(id=comment_id).exists():
+                comment = Comment.objects.get(id=comment_id)
+                user = User.objects.get(username=username)
+
+                if user.username == comment.created_by.username:
+                    Comment.objects.filter(id=comment_id).delete()
+                    return JsonResponse({'status': 'ok'})
+                else:
+                    return JsonResponse({'status': 401, 'description': 'Can\'t remove this comment. Not yours!'})
+            else:
+                return JsonResponse({'status': 401, 'description': 'Comment by id=' + str(comment_id) + ' not found'})
+        else:
+            return JsonResponse({'status': 401, 'description': 'Failed'})
+    return JsonResponse({'status': 401, 'description': 'Wrong Method'})
 
 
 @csrf_exempt
