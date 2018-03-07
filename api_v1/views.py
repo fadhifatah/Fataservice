@@ -1,18 +1,37 @@
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import User
+from api_v1.models import User
+from api_v1.constants import Constants
+import requests
 
 
 # Create your views here.
 @csrf_exempt
 def login(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        try:
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+        except ValueError:
+            return JsonResponse({'status': '401', 'description': 'Failed'})
 
-        User.objects.create(username='1406571842', display_name='Fatah Fadhlurrohman')
-        return JsonResponse({'username': username, 'password': password})
-    return JsonResponse({'status': 'Gagal'})
+        oauth_token = requests.post(
+            'http://172.22.0.2/oauth/token',
+            data={
+                'username': username,
+                'password': password,
+                'grant_type': 'password',
+                'client_id': Constants.client_id,
+                'client_secret': Constants.client_secret,
+            }
+        )
+
+        if oauth_token.status_code == '200':
+            access_token = oauth_token.json()['access_token']
+            return JsonResponse({'status': 'ok', 'access_token': access_token})
+        else:
+            return JsonResponse({'status': '401', 'description': 'Failed'})
+    return JsonResponse({'status': '401', 'description': 'Wrong Method'})
 
 
 @csrf_exempt
@@ -27,9 +46,9 @@ def get_users(request):
             username = dummy.username
             display_name = dummy.display_name
 
-        return JsonResponse({'username': username, 'display_name': display_name})
+        return JsonResponse({'username': str(username), 'display_name': display_name})
     else:
-        return JsonResponse()
+        return JsonResponse({})
 
 
 @csrf_exempt
