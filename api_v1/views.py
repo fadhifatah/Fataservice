@@ -56,6 +56,10 @@ def register(request):
         )
 
         if oauth_resource.status_code == 200:
+            username = oauth_resource.json()['user_id']
+
+            User.objects.filter(username=username).delete()
+
             return JsonResponse({'status': 'ok', 'access_token': token})
         else:
             return JsonResponse({'status': 401, 'description': 'Failed'})
