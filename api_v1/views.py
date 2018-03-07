@@ -12,10 +12,12 @@ import json
 def login(request):
     if request.method == 'POST':
         try:
-            username = request.POST.get('username')
-            password = request.POST.get('password')
+            body_unicode = request.body.decode('utf-8')
+            body = json.loads(body_unicode)
+            username = body['username']
+            password = body['password']
         except ValueError:
-            return JsonResponse({'status': 401, 'description': 'Wrong POST data'})
+            return JsonResponse({'status': 401, 'description': 'Wrong JSON format'})
 
         oauth_token = requests.post(
             'http://172.22.0.2/oauth/token',
@@ -46,9 +48,11 @@ def register(request):
             return JsonResponse({'status': 401, 'description': 'Header Error'})
 
         try:
-            display_name = request.POST.get('displayName')
+            body_unicode = request.body.decode('utf-8')
+            body = json.loads(body_unicode)
+            display_name = body['displayName']
         except ValueError:
-            return JsonResponse({'status': 401, 'description': 'Wrong POST data'})
+            return JsonResponse({'status': 401, 'description': 'Wrong JSON format'})
 
         oauth_resource = requests.get(
             'http://172.22.0.2/oauth/resource',
@@ -126,9 +130,11 @@ def create_comment(request):
             return JsonResponse({'status': 401, 'description': 'Header Error'})
 
         try:
-            comment = request.POST.get('comment')
+            body_unicode = request.body.decode('utf-8')
+            body = json.loads(body_unicode)
+            comment = body['comment']
         except ValueError:
-            return JsonResponse({'status': 401, 'description': 'Wrong POST data'})
+            return JsonResponse({'status': 401, 'description': 'Wrong JSON format'})
 
         oauth_resource = requests.get(
             'http://172.22.0.2/oauth/resource',
@@ -191,10 +197,10 @@ def delete_comment(request):
 
         try:
             body_unicode = request.body.decode('utf-8')
-            body = json.loads(json.loads(body_unicode))
+            body = json.loads(body_unicode)
             comment_id = body['id']
         except ValueError:
-            return JsonResponse({'status': 401, 'description': 'Wrong data'})
+            return JsonResponse({'status': 401, 'description': 'Wrong JSON format'})
 
         oauth_resource = requests.get(
             'http://172.22.0.2/oauth/resource',
