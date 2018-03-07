@@ -26,16 +26,11 @@ SECRET_KEY = '#kpbqhy57-47$_6k47omb0)glwgen7l0_qc21s=agk0*ji7366'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'host20018.proxy.infralabs.cs.ui.ac.id',
+    'my-load-balancer',
     'host21018.proxy.infralabs.cs.ui.ac.id',
     'host22018.proxy.infralabs.cs.ui.ac.id',
     'host23018.proxy.infralabs.cs.ui.ac.id',
     'host24018.proxy.infralabs.cs.ui.ac.id',
-    '172.22.0.67:80',
-    '172.22.0.98:80',
-    '172.22.0.129:80',
-    '172.22.0.160:80',
-    '172.22.0.191:80',
     '127.0.0.1:8000',
 ]
 
