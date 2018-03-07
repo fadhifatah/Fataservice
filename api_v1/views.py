@@ -160,8 +160,8 @@ def create_comment(request):
 
 def get_comment_by_id(request, comment_id):
     if request.method == 'GET':
-        if Comment.objects.filter(id(comment_id)).exists():
-            comment = Comment.objects.get(id(comment_id))
+        if Comment.objects.filter(id=comment_id).exists():
+            comment = Comment.objects.get(id=comment_id)
             data = {
                 'id': comment.id,
                 'comment': comment.comment,
