@@ -190,7 +190,9 @@ def delete_comment(request):
             return JsonResponse({'status': 401, 'description': 'Header Error'})
 
         try:
-            comment_id = (json.loads(request.body.decode('utf-8')))['id']
+            body_unicode = request.body.decode('utf-8')
+            body = json.loads(json.loads(body_unicode))
+            comment_id = body['id']
         except ValueError:
             return JsonResponse({'status': 401, 'description': 'Wrong data'})
 
