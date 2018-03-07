@@ -13,7 +13,7 @@ def login(request):
             username = request.POST.get('username')
             password = request.POST.get('password')
         except ValueError:
-            return JsonResponse({'status': '401', 'description': 'Failed'})
+            return JsonResponse({'status': '401', 'description': 'Wrong POST data'})
 
         oauth_token = requests.post(
             'http://172.22.0.2/oauth/token',
