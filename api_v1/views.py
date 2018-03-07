@@ -190,9 +190,9 @@ def delete_comment(request):
             return JsonResponse({'status': 401, 'description': 'Header Error'})
 
         try:
-            comment_id = json.loads(request.body.decode('utf-8'))['id']
+            comment_id = (json.loads(request.body.decode('utf-8')))['id']
         except ValueError:
-            return JsonResponse({'status': 401, 'description': 'Wrong POST data'})
+            return JsonResponse({'status': 401, 'description': 'Wrong data'})
 
         oauth_resource = requests.get(
             'http://172.22.0.2/oauth/resource',
