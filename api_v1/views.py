@@ -38,7 +38,7 @@ def login(request):
 def register(request):
     if request.method == 'POST':
         try:
-            auth_header = str(request.META['Authorization'])
+            auth_header = str(request.META['HTTP_AUTHORIZATION'])
             token = auth_header[7:]
         except ValueError:
             return JsonResponse({'status': '401', 'description': 'Header Error'})
