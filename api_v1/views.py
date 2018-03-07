@@ -51,13 +51,14 @@ def register(request):
         oauth_resource = requests.get(
             'http://172.22.0.2/oauth/resource',
             headers={
-                'Authorization': auth_header
+                'Authorization': 'Bearer ' + token
             }
         )
 
         if oauth_resource.status_code == 200:
             return JsonResponse({'status': 'ok', 'access_token': token})
-        return JsonResponse({'status': 401, 'description': 'Failed'})
+        else:
+            return JsonResponse({'status': 401, 'description': 'Failed'})
     return JsonResponse({'status': 401, 'description': 'Wrong Method'})
 
 
