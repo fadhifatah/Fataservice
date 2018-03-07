@@ -36,19 +36,41 @@ def login(request):
 
 @csrf_exempt
 def register(request):
-    return JsonResponse({})
+    if request.method == 'POST':
+        try:
+            auth_header = str(request.META['Authorization'])
+            token = auth_header[7:]
+        except ValueError:
+            return JsonResponse({'status': '401', 'description': 'Header Error'})
+        try:
+            display_name = request.POST.get('displayName')
+        except ValueError:
+            return JsonResponse({'status': '401', 'description': 'Wrong POST data'})
+
+        oauth_resource = requests.get(
+            'http://172.22.0.2/oauth/resource',
+            headers={
+                'Authorization': 'Bearer ' + token
+            }
+        )
+
+        if oauth_resource.status_code == 200:
+            return JsonResponse({'status': 'ok', 'access_token': token})
+        return JsonResponse({'status': '401', 'description': 'Wrong Method'})
+    return JsonResponse({'status': '401', 'description': 'Wrong Method'})
 
 
 def get_users(request):
     if request.method == 'GET':
+
         users_dummy = User.objects.all()
         for dummy in users_dummy:
             username = dummy.username
             display_name = dummy.display_name
 
         return JsonResponse({'username': str(username), 'display_name': display_name})
-    else:
-        return JsonResponse({})
+
+    return JsonResponse({'status': '401', 'description': 'Wrong Method'})
 
 
 @csrf_exempt
