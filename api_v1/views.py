@@ -189,7 +189,7 @@ def delete_comment(request):
             return JsonResponse({'status': 401, 'description': 'Header Error'})
 
         try:
-            comment_id = request.DELETE.get('id')
+            comment_id = request.body.get('id')
         except ValueError:
             return JsonResponse({'status': 401, 'description': 'Wrong POST data'})
 
