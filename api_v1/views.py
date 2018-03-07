@@ -221,4 +221,6 @@ def delete_comment(request):
 
 @csrf_exempt
 def update_comment(request):
+    if request.method == 'PUT':
+        return
     return JsonResponse({})
