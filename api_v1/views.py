@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger, InvalidPage
 from api_v1.models import User
 from api_v1.constants import Constants
 import requests
@@ -57,8 +58,12 @@ def register(request):
 
         if oauth_resource.status_code == 200:
             username = oauth_resource.json()['user_id']
-            User.objects.create(username=username, display_name=display_name)
-            return JsonResponse({'status': 'ok', 'access_token': token})
+
+            if User.objects.filter(username=username).exists():
+                return JsonResponse({'status': 401, 'description': 'User already exist'})
+            else:
+                User.objects.create(username=username, display_name=display_name)
+                return JsonResponse({'status': 'ok', 'access_token': token})
         else:
             return JsonResponse({'status': 401, 'description': 'Failed'})
     return JsonResponse({'status': 401, 'description': 'Wrong Method'})
@@ -66,14 +71,47 @@ def register(request):
 
 def get_users(request):
     if request.method == 'GET':
+        try:
+            auth_header = str(request.META['HTTP_AUTHORIZATION'])
+            token = auth_header[7:]
+        except ValueError:
+            return JsonResponse({'status': 401, 'description': 'Header Error'})
 
-        users_dummy = User.objects.all()
-        for dummy in users_dummy:
-            username = dummy.username
-            display_name = dummy.display_name
+        oauth_resource = requests.get(
+            'http://172.22.0.2/oauth/resource',
+            headers={
+                'Authorization': 'Bearer ' + token
+            }
+        )
 
-        return JsonResponse({'username': str(username), 'display_name': display_name})
+        if oauth_resource.status_code == 200:
+            try:
+                page = request.GET.get('page')
+                limit = request.GET.get('limit')
+            except ValueError:
+                return JsonResponse({'status': 401, 'description': 'Wrong parameters'})
 
+            list_of_users = User.objects.all()
+            paginator = Paginator(list_of_users, limit)
+
+            try:
+                users = paginator.page(page)
+            except EmptyPage:
+                return JsonResponse({'status': 401, 'description': 'Page empty'})
+            except PageNotAnInteger:
+                return JsonResponse({'status': 401, 'description': 'Invalid page format'})
+            except InvalidPage:
+                return JsonResponse({'status': 401, 'description': 'Invalid page number'})
+
+            data = []
+            for user in users:
+                user_data = {'userId': user.id, 'displayName': user.display_name}
+                data.append(user_data)
+
+            return JsonResponse({'status': 'ok', 'page': page, 'limit': limit, 'total': list_of_users.__sizeof__(),
+                                 'data': data})
+        else:
+            return JsonResponse({'status': 'ok', 'description': 'Failed'})
     return JsonResponse({'status': 401, 'description': 'Wrong Method'})
 
 
