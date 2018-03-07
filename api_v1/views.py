@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger, InvalidPage
-from api_v1.models import User
+from api_v1.models import User, Comment
 from api_v1.constants import Constants
 import requests
 
@@ -108,8 +108,8 @@ def get_users(request):
                 user_data = {'userId': user.id, 'displayName': user.display_name}
                 data.append(user_data)
 
-            return JsonResponse({'status': 'ok', 'page': page, 'limit': limit, 'total': list_of_users.__sizeof__(),
-                                 'data': data})
+            return JsonResponse({'status': 'ok', 'page': int(page), 'limit': int(limit),
+                                 'total': int(list_of_users.count()), 'data': data})
         else:
             return JsonResponse({'status': 'ok', 'description': 'Failed'})
     return JsonResponse({'status': 401, 'description': 'Wrong Method'})
@@ -117,7 +117,45 @@ def get_users(request):
 
 @csrf_exempt
 def create_comment(request):
-    return JsonResponse({})
+    if request.method == 'POST':
+        try:
+            auth_header = str(request.META['HTTP_AUTHORIZATION'])
+            token = auth_header[7:]
+        except ValueError:
+            return JsonResponse({'status': 401, 'description': 'Header Error'})
+
+        try:
+            comment = request.POST.get('comment')
+        except ValueError:
+            return JsonResponse({'status': 401, 'description': 'Wrong POST data'})
+
+        oauth_resource = requests.get(
+            'http://172.22.0.2/oauth/resource',
+            headers={
+                'Authorization': 'Bearer ' + token
+            }
+        )
+
+        if oauth_resource.status_code == 200:
+            username = oauth_resource.json()['user_id']
+
+            if User.objects.filter(username=username).exists():
+                user = User.objects.get(username=username)
+
+                comment = Comment.objects.create(username=user, comment=comment)
+                data = {
+                    'id': comment.id,
+                    'comment': comment.comment,
+                    'createdBy': user.display_name,
+                    'createdAt': comment.created_at,
+                    'updatedAt': comment.updated_at
+                }
+                return JsonResponse({'status': 'ok', 'data': data})
+            else:
+                return JsonResponse({'status': 401, 'description': 'Please register first!'})
+        else:
+            return JsonResponse({'status': 401, 'description': 'Failed'})
+    return JsonResponse({'status': 401, 'description': 'Wrong Method'})
 
 
 def get_comment_by_id(request, comment_id):
