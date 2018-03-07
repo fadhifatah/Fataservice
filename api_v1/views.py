@@ -4,6 +4,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger, Invali
 from api_v1.models import User, Comment
 from api_v1.constants import Constants
 import requests
+import json
 
 
 # Create your views here.
@@ -189,7 +190,7 @@ def delete_comment(request):
             return JsonResponse({'status': 401, 'description': 'Header Error'})
 
         try:
-            comment_id = request.body.get('id')
+            comment_id = json.load(request.body.decode('uf-8'))['id']
         except ValueError:
             return JsonResponse({'status': 401, 'description': 'Wrong POST data'})
 
