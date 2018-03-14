@@ -32,6 +32,7 @@ ALLOWED_HOSTS = [
     'host23018.proxy.infralabs.cs.ui.ac.id',
     'host24018.proxy.infralabs.cs.ui.ac.id',
     '127.0.0.1:8000',
+    'host21018.proxy.infralabs.cs.ui.ac.id:8000',
 ]
 
 
