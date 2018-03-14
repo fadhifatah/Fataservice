@@ -3,5 +3,5 @@ from . import views
 
 urlpatterns = [
     path('ori/', views.image),
-    path('thumb/', views.thumbnail),
+    path('thumbnail/', views.thumb),
 ]
