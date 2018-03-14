@@ -25,4 +25,7 @@ urlpatterns = [
     # URL for viewing list of objects
     path('users/', include('user.urls')),
     path('comments/', include('comment.urls')),
+
+    # URL Lab
+    path('image/', include('thumb.urls')),
 ]
