@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'my-load-balancer',
-    'host21018.proxy.infralabs.cs.ui.ac.id',
     'host22018.proxy.infralabs.cs.ui.ac.id',
     'host23018.proxy.infralabs.cs.ui.ac.id',
     'host24018.proxy.infralabs.cs.ui.ac.id',
