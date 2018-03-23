@@ -26,6 +26,9 @@ urlpatterns = [
     path('users/', include('user.urls')),
     path('comments/', include('comment.urls')),
 
+    # COTS_1
+    path('oauth/', include('cots_1.urls')),
+
     # URL Lab
     path('image/', include('thumb.urls')),
 ]

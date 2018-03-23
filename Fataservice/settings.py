@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api_v1',
     'thumb',
+    'cots_1',
 ]
 
 MIDDLEWARE = [
