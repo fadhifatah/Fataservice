@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'api_v1',
     'thumb',
     'cots_1',
+    'algorithm',
 ]
 
 MIDDLEWARE = [
