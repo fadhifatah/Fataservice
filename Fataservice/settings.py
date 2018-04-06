@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'thumb',
     'cots_1',
     'algorithm',
+    'upload',
 ]
 
 MIDDLEWARE = [

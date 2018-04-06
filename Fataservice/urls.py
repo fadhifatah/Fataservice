@@ -28,4 +28,5 @@ urlpatterns = [
     # URL Lab
     path('image/', include('thumb.urls')),
     path('algorithms/', include('algorithm.urls')),
+    path('upload/', include('upload.urls')),
 ]
