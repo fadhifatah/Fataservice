@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Service Orchestration Scheme</title>
+</head>
+<body>
+    <!-- Upload form. Note enctype attribute! -->
+    <form action="{% url "index" %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="A">A</label>
+        <input id="A" name="A" type="number" required />
+
+        <label for="B">B</label>
+        <input id="B" name="B" type="number" required />
+
+        <label for="C">C</label>
+        <input id="C" name="C" type="number" required />
+
+        <label for="D">D</label>
+        <input id="D" name="D" type="number" required />
+
+        <input type="submit" value="Submit"/>
+    </form>
+
+    <p>Hasil: {{ result }}</p>
+</body>
+</html>

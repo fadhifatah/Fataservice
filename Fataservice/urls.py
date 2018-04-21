@@ -24,6 +24,7 @@ urlpatterns = [
 
     # COTS_1
     path('oauth/', include('cots_1.urls')),
+    path('cots_2/', include('cots_2.urls')),
 
     # URL Lab
     path('image/', include('thumb.urls')),

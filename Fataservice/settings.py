@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '#kpbqhy57-47$_6k47omb0)glwgen7l0_qc21s=agk0*ji7366'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'my-load-balancer',
@@ -33,8 +33,8 @@ ALLOWED_HOSTS = [
     'host24018.proxy.infralabs.cs.ui.ac.id',
     '172.22.0.98',
     '172.22.0.129',
-    '172.22.0.129',
-    '172.22.0.129',
+    '172.22.0.160',
+    '172.22.0.191',
     '127.0.0.1',
 ]
 
@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'cots_1',
     'algorithm',
     'upload',
+    'cots_2',
 ]
 
 MIDDLEWARE = [
@@ -90,27 +91,27 @@ WSGI_APPLICATION = 'Fataservice.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'd9ef928o48bsjr',
-#         'USER': 'kpbnkfjmkeplil',
-#         'PASSWORD': '171ff01a6e8de4e3f09bafde145cc268b4bc81295d448d37a262342c9a2d52bc',
-#         'HOST': 'ec2-54-221-220-59.compute-1.amazonaws.com',
-#         'PORT': '5432',
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'fataservice',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': '172.22.0.67',
+        'NAME': 'd9ef928o48bsjr',
+        'USER': 'kpbnkfjmkeplil',
+        'PASSWORD': '171ff01a6e8de4e3f09bafde145cc268b4bc81295d448d37a262342c9a2d52bc',
+        'HOST': 'ec2-54-221-220-59.compute-1.amazonaws.com',
         'PORT': '5432',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'fataservice',
+#         'USER': 'postgres',
+#         'PASSWORD': 'postgres',
+#         'HOST': '172.22.0.67',
+#         'PORT': '5432',
+#     }
+# }
 
 
 # Password validation
