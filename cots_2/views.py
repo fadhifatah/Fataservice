@@ -49,7 +49,7 @@ def orchestration(request):
 
         # proceed blue formula
         blue_r = requests.post(
-            'http://172.22.0.129/cots_2/blue?a=' + value_a + '&b=' + value_b + '&c=' + value_b + '&d=' + value_b,
+            'http://172.22.0.129/cots_2/blue?a=' + value_a + '&b=' + value_b + '&c=' + value_c + '&d=' + value_d,
         )
 
         r1 = 0
@@ -58,7 +58,7 @@ def orchestration(request):
 
         # proceed red formula
         red_r = requests.get(
-            'http://172.22.0.160/cots_2/red?a=' + value_a + '&b=' + value_b + '&c=' + value_b + '&d=' + value_b,
+            'http://172.22.0.160/cots_2/red?a=' + value_a + '&b=' + value_b + '&c=' + value_c + '&d=' + value_d,
         )
 
         r2 = 0
