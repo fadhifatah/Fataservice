@@ -63,7 +63,7 @@ def index(request):
 
         # proceed orchestrator
         orchestrator = requests.get(
-            'http://127.0.0.1:8000/algorithms/green?'
+            'http://host21018.proxy.infralabs.cs.ui.ac.id/algorithms/green?'
             'a=' + str(value_a) +
             '&b=' + str(value_b) +
             '&c=' + str(value_c) +
@@ -91,7 +91,7 @@ def green(request):
         while True:
             # r1 requests
             r1_req = requests.get(
-                'http://127.0.0.1:8000/algorithms/r1?'
+                'http://host22018.proxy.infralabs.cs.ui.ac.id/algorithms/r1?'
                 'a=' + str(value_a) +
                 '&b=' + str(value_b) +
                 '&c=' + str(value_c) +
@@ -107,7 +107,7 @@ def green(request):
         while True:
             # r2 requests
             r2_req = requests.get(
-                'http://127.0.0.1:8000/algorithms/r2?'
+                'http://host23018.proxy.infralabs.cs.ui.ac.id/algorithms/r2?'
                 'a=' + str(value_a) +
                 '&b=' + str(value_b) +
                 '&c=' + str(value_c) +
@@ -123,7 +123,7 @@ def green(request):
         while True:
             # r3 requests
             r3_req = requests.get(
-                'http://127.0.0.1:8000/algorithms/r3?'
+                'http://host24018.proxy.infralabs.cs.ui.ac.id/algorithms/r3?'
                 'a=' + str(value_a) +
                 '&b=' + str(value_b) +
                 '&c=' + str(value_c) +
