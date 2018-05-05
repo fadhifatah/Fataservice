@@ -1,10 +1,12 @@
-import time
 from collections import OrderedDict
 
 import requests
+import xmltodict
+import xml.etree.ElementTree as ET
 from django.http import JsonResponse
 from django.shortcuts import render
 
+from algorithm.constants import Constants, Review
 from algorithm.forms import InputForm
 
 
@@ -294,3 +296,109 @@ def r3(request):
 
         return JsonResponse(OrderedDict([('status', 200), ('description', 'OK'),
                                          ('result', g_res)]))
+
+
+def nlp_restaurant(request):
+    if request.method == 'GET':
+        list_of_unique_rid = set()
+
+        with open(Constants.dir + '\\data\\dataset_part_31.xml') as d1:
+            data_set1 = xmltodict.parse(d1.read())
+
+        data1 = data_set1['corpus']['review']
+        for d1 in data1:
+            rid1 = d1['@rid']
+            list_of_unique_rid.add(rid1)
+
+        with open(Constants.dir + '\\data\\dataset_part_32.xml') as d2:
+            data_set2 = xmltodict.parse(d2.read())
+
+        data2 = data_set2['corpus']['review']
+        for d2 in data2:
+            rid2 = d2['@rid']
+            list_of_unique_rid.add(rid2)
+
+        with open(Constants.dir + '\\data\\dataset_part_33.xml') as d3:
+            data_set3 = xmltodict.parse(d3.read())
+
+        data3 = data_set3['corpus']['review']
+        for d3 in data3:
+            rid3 = d3['@rid']
+            list_of_unique_rid.add(rid3)
+
+        return render(request, 'nlp_compare.html', {'size': list_of_unique_rid.__len__(),
+                                                    'data': list_of_unique_rid,
+                                                    'flag': 1})
+
+
+def nlp_restaurant_rid(request, rid):
+    global review1, review2, review3
+    if request.method == 'GET':
+        with open(Constants.dir + '\\data\\dataset_part_31.xml') as d1:
+            data_set1 = xmltodict.parse(d1.read())
+
+        data1 = data_set1['corpus']['review']
+        for d1 in data1:
+            if d1['@rid'] == str(rid):
+                d1_aspects = {}
+
+                aspects = d1['aspects']['aspect']
+                if isinstance(aspects, list):
+                    for aspect in aspects:
+                        d1_aspects[aspect['@category']] = aspect['@polarity']
+
+                    review1 = Review(d1['@rid'], d1['text'], d1_aspects, 'Agung')
+                    break
+                else:
+                    review1 = Review(d1['@rid'], d1['text'], {aspects['@category']: aspects['@polarity']}, 'Agung')
+                    break
+
+            else:
+                review1 = Review('-', '-', {}, '-')
+
+        with open(Constants.dir + '\\data\\dataset_part_32.xml') as d2:
+            data_set2 = xmltodict.parse(d2.read())
+
+        data2 = data_set2['corpus']['review']
+        for d2 in data2:
+            if d2['@rid'] == str(rid):
+                d2_aspects = {}
+
+                aspects = d2['aspects']['aspect']
+                if isinstance(aspects, list):
+                    for aspect in aspects:
+                        d2_aspects[aspect['@category']] = aspect['@polarity']
+
+                    review2 = Review(d2['@rid'], d2['text'], d2_aspects, 'Faisal')
+                    break
+                else:
+                    review2 = Review(d2['@rid'], d2['text'], {aspects['@category']: aspects['@polarity']}, 'Faisal')
+                    break
+
+            else:
+                review2 = Review('-', '-', {}, '-')
+
+        with open(Constants.dir + '\\data\\dataset_part_33.xml') as d3:
+            data_set3 = xmltodict.parse(d3.read())
+
+        data3 = data_set3['corpus']['review']
+        for d3 in data3:
+            if d3['@rid'] == str(rid):
+                d3_aspects = {}
+
+                aspects = d3['aspects']['aspect']
+                if isinstance(aspects, list):
+                    for aspect in aspects:
+                        d3_aspects[aspect['@category']] = aspect['@polarity']
+
+                    review3 = Review(d3['@rid'], d3['text'], d3_aspects, 'Fatah')
+                    break
+                else:
+                    review3 = Review(d3['@rid'], d3['text'], {aspects['@category']: aspects['@polarity']}, 'Fatah')
+                    break
+
+            else:
+                review3 = Review('-', '-', {}, '-')
+
+        return render(request, 'nlp_compare.html', {'flag': 2, 'review1': review1, 'review2': review2,
+                                                    'review3': review3})

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NLP - Restaurant Review Sentiment</title>
+    <style>
+        div.one {
+            margin: 1em;
+            padding: 1em;
+            border: 1px black solid;
+        }
+
+        div.container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        div.aspects {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+        }
+    </style>
+</head>
+<body>
+    {% if flag == 1%}
+        <div class="one">
+            <p>Total RID: {{ size }}</p>
+            {% for d in data %}
+            <a href="{% url 'nlp_restaurant_rid' rid=d %}">{{ d }}</a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="one">
+            <a href="{% url 'nlp_restaurant' %}"><< Back to list</a>
+        </div>
+        <div class="container">
+            <div class="one">
+                <p>Dataset 31: {{ review1.rid }} ({{ review1.trainer }})</p>
+                <p>===</p>
+                <p>{{ review1.text }}</p>
+                <p>===</p>
+                <div class="aspects">
+                    <div>
+                        <p>FOOD</p>
+                        <p style="font-weight: bold">{{ review1.food }}</p>
+                    </div>
+                    <div>
+                        <p>PRICE</p>
+                        <p style="font-weight: bold">{{ review1.price }}</p>
+                    </div>
+                    <div>
+                        <p>SERVICE</p>
+                        <p style="font-weight: bold">{{ review1.service }}</p>
+                    </div>
+                    <div>
+                        <p>AMBIENCE</p>
+                        <p style="font-weight: bold">{{ review1.ambience }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="one">
+                <p>Dataset 32: {{ review2.rid }} ({{ review2.trainer }})</p>
+                <p>===</p>
+                <p>{{ review2.text }}</p>
+                <p>===</p>
+                <div class="aspects">
+                    <div>
+                        <p>FOOD</p>
+                        <p style="font-weight: bold">{{ review2.food }}</p>
+                    </div>
+                    <div>
+                        <p>PRICE</p>
+                        <p style="font-weight: bold">{{ review2.price }}</p>
+                    </div>
+                    <div>
+                        <p>SERVICE</p>
+                        <p style="font-weight: bold">{{ review2.service }}</p>
+                    </div>
+                    <div>
+                        <p>AMBIENCE</p>
+                        <p style="font-weight: bold">{{ review2.ambience }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="one">
+                <p>Dataset 33: {{ review3.rid }} ({{ review3.trainer }})</p>
+                <p>===</p>
+                <p>{{ review3.text }}</p>
+                <p>===</p>
+                <div class="aspects">
+                    <div>
+                        <p>FOOD</p>
+                        <p style="font-weight: bold">{{ review3.food }}</p>
+                    </div>
+                    <div>
+                        <p>PRICE</p>
+                        <p style="font-weight: bold">{{ review3.price }}</p>
+                    </div>
+                    <div>
+                        <p>SERVICE</p>
+                        <p style="font-weight: bold">{{ review3.service }}</p>
+                    </div>
+                    <div>
+                        <p>AMBIENCE</p>
+                        <p style="font-weight: bold">{{ review3.ambience }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</body>
+</html>
