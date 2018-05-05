@@ -2,7 +2,6 @@ from collections import OrderedDict
 
 import requests
 import xmltodict
-import xml.etree.ElementTree as ET
 from django.http import JsonResponse
 from django.shortcuts import render
 
@@ -302,7 +301,7 @@ def nlp_restaurant(request):
     if request.method == 'GET':
         list_of_unique_rid = set()
 
-        with open(Constants.dir + '\\data\\dataset_part_31.xml') as d1:
+        with open(Constants.dir + '/data/dataset_part_31.xml') as d1:
             data_set1 = xmltodict.parse(d1.read())
 
         data1 = data_set1['corpus']['review']
@@ -310,7 +309,7 @@ def nlp_restaurant(request):
             rid1 = d1['@rid']
             list_of_unique_rid.add(rid1)
 
-        with open(Constants.dir + '\\data\\dataset_part_32.xml') as d2:
+        with open(Constants.dir + '/data/dataset_part_32.xml') as d2:
             data_set2 = xmltodict.parse(d2.read())
 
         data2 = data_set2['corpus']['review']
@@ -318,7 +317,7 @@ def nlp_restaurant(request):
             rid2 = d2['@rid']
             list_of_unique_rid.add(rid2)
 
-        with open(Constants.dir + '\\data\\dataset_part_33.xml') as d3:
+        with open(Constants.dir + '/data/dataset_part_33.xml') as d3:
             data_set3 = xmltodict.parse(d3.read())
 
         data3 = data_set3['corpus']['review']
@@ -334,7 +333,7 @@ def nlp_restaurant(request):
 def nlp_restaurant_rid(request, rid):
     global review1, review2, review3
     if request.method == 'GET':
-        with open(Constants.dir + '\\data\\dataset_part_31.xml') as d1:
+        with open(Constants.dir + '/data/dataset_part_31.xml') as d1:
             data_set1 = xmltodict.parse(d1.read())
 
         data1 = data_set1['corpus']['review']
@@ -356,7 +355,7 @@ def nlp_restaurant_rid(request, rid):
             else:
                 review1 = Review('-', '-', {}, '-')
 
-        with open(Constants.dir + '\\data\\dataset_part_32.xml') as d2:
+        with open(Constants.dir + '/data/dataset_part_32.xml') as d2:
             data_set2 = xmltodict.parse(d2.read())
 
         data2 = data_set2['corpus']['review']
@@ -378,7 +377,7 @@ def nlp_restaurant_rid(request, rid):
             else:
                 review2 = Review('-', '-', {}, '-')
 
-        with open(Constants.dir + '\\data\\dataset_part_33.xml') as d3:
+        with open(Constants.dir + '/data/dataset_part_33.xml') as d3:
             data_set3 = xmltodict.parse(d3.read())
 
         data3 = data_set3['corpus']['review']
