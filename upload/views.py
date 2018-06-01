@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render
-from django.template import RequestContext
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse
 
-from .models import File
 from .forms import FileForm
+from .models import File
 
 
 def upload(request):
