@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>File Zipper</title>
+        <script>
+            interval = null;
+
+            function openProgressBar() {
+                /* generate random progress-id */
+                uuid = "";
+                for (i = 0; i < 32; i++) {
+                    uuid += Math.floor(Math.random() * 16).toString(16);
+                }
+                /* patch the form-action tag to include the progress-id */
+                document.getElementById("upload").action="/upload.php?X-Progress-ID=" + uuid;
+
+                /* call the progress-updater every 1000ms */
+                interval = window.setInterval(
+                    function () {
+                        fetch(uuid);
+                        },
+                    1000
+                );
+            }
+
+            function fetch(uuid) {
+                req = new XMLHttpRequest();
+                req.open("GET", "/progress", false);
+                req.setRequestHeader("X-Progress-ID", uuid);
+                req.onreadystatechange = function () {
+                    if (req.readyState === 4) {
+                        if (req.status === 200) {
+                            /* poor-man JSON parser */
+                            var upload = eval(req.responseText);
+
+                            document.getElementById('tp').innerHTML = upload.state;
+
+                            /* change the width if the inner progress-bar */
+                            if (upload.state === 'done' || upload.state === 'uploading') {
+                                bar = document.getElementById('progressbar');
+                                w = 400 * upload.received / upload.size;
+                                bar.style.width = w + 'px';
+                            }
+                            /* we are done, stop the interval */
+                            if (upload.state === 'done') {
+                                window.clearTimeout(interval);
+                            }
+                        }
+                    }
+                };
+                req.send(null);
+            }
+        </script>
+        <style>
+            .bar {
+                width: 300px;
+            }
+
+            #progress {
+                background: #eee;
+                border: 1px solid #222;
+                margin-top: 20px;
+            }
+
+            #progressbar {
+                width: 0;
+                height: 24px;
+                background: #333;
+            }
+        </style>
+</head>
+<body>
+    {% if flag %}
+        <div id="uploading">
+            <div id="progress" class="bar">
+                <div id="progressbar">&nbsp;</div>
+                <div id="percents"></div>
+            </div>
+        </div>
+    {% else %}
+        <form action="{% url "index_zip" %}" method="post" enctype="multipart/form-data" onsubmit="openProgressBar()">
+        {% csrf_token %}
+            <p style="background: red; color: white; padding: 4px" {{ hidden }}>ACCESS DENIED! USERNAME OR PASSWORD IS INVALID</p>
+            <p><input type="text" name="username" placeholder="Username"/></p>
+            <p><input type="password" name="password" placeholder="Password"/></p>
+
+            <p>{{ form.non_field_errors }}</p>
+
+            <p>{{ form.file.label_tag }} {{ form.file.help_text }}</p>
+
+            <p>
+                {{ form.file.errors }}
+                {{ form.file }}
+            </p>
+
+            <p><input type="submit" value="Upload"/></p>
+    </form>
+    {% endif %}
+</body>
+</html>

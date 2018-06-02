@@ -32,6 +32,7 @@ urlpatterns = [
     path('image/', include('thumb.urls')),
     path('algorithms/', include('algorithm.urls')),
     path('upload/', include('upload.urls')),
+    path('uas/latihan/', include('latihan.urls')),
 ]
 
 if settings.DEBUG:

@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'algorithm',
     'upload',
     'cots_2',
+    'latihan',
 ]
 
 MIDDLEWARE = [
