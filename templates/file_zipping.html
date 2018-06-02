@@ -78,9 +78,12 @@
                 <div id="percents"></div>
             </div>
         </div>
+        <div id="jam"></div>
+        <p>{{ file_base64 }}</p>
     {% else %}
         <form action="{% url "index_zip" %}" method="post" enctype="multipart/form-data" onsubmit="openProgressBar()">
         {% csrf_token %}
+            <input name="MAX_FILE_SIZE" value="30000000" type="hidden" />
             <p style="background: red; color: white; padding: 4px" {{ hidden }}>ACCESS DENIED! USERNAME OR PASSWORD IS INVALID</p>
             <p><input type="text" name="username" placeholder="Username"/></p>
             <p><input type="password" name="password" placeholder="Password"/></p>
@@ -97,5 +100,39 @@
             <p><input type="submit" value="Upload"/></p>
     </form>
     {% endif %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript">
+        WebSocketTest();
+        function WebSocketTest() {
+
+            if ("WebSocket" in window) {
+                var ws_stomp_display = new SockJS( 'http://152.118.148.103:15674/stomp');
+                var client_display = Stomp.over(ws_stomp_display);
+                var mq_queue_display = "/exchange/compression/stream";
+
+                var on_connect_display = function() {
+                    console.log('connected');
+                    client_display.subscribe(mq_queue_display, on_message_display);
+                };
+
+                var on_error_display =  function() {
+                    console.log('error');
+                };
+
+                var on_message_display = function(m) {
+                    console.log('message received');
+                    $('#jam').html(m.body);
+                };
+
+                client_display.connect('1406571842', '1406571842', on_connect_display, on_error_display, '/1406571842');
+
+            } else {
+                // The browser doesn't support WebSocket
+                alert("WebSocket NOT supported by your Browser!");
+            }
+        }
+    </script>
 </body>
 </html>

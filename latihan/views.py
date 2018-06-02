@@ -1,9 +1,10 @@
+import base64
+
 import requests
 from django.shortcuts import render
 
 from latihan.constants import Credentials
 from latihan.forms import DocumentForm
-from latihan.models import Document
 
 
 # Create your views here.
@@ -29,21 +30,23 @@ def index(request):
             )
 
             if oauth_token.status_code == 200:
-                file = Document(file=request.FILES['file'])
-                file.save()
+                file = request.FILES['file']
+
+                file_base64 = base64.b64encode(file.read())
+                print(file_base64)
 
                 # Redirect to the document list after POST
                 return render(
-                            request,
-                            'file_zipping.html',
-                            {'flag': True}
-                        )
+                    request,
+                    'file_zipping.html',
+                    {'flag': True, 'file_base64': file_base64}
+                )
             else:
                 return render(
-                            request,
-                            'file_zipping.html',
-                            {'flag': False}
-                        )
+                    request,
+                    'file_zipping.html',
+                    {'flag': False, 'form': form}
+                )
     else:
         form = DocumentForm()  # A empty, unbound form
 
